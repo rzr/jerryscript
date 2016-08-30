@@ -18,30 +18,34 @@ I've slightly changed the step to use SDK from Espressif official SDK
 
 ##### Toolchain:
 
+common dependencies
+
+```
+sudo apt-get install \
+   git autoconf gperf \
+   bison flex texinfo libtool libncurses5-dev wget \
+   gawk python-serial libexpat-dev
+```
+
 dependencies for x86
 ```
-sudo apt-get install git autoconf build-essential gperf \
-   bison flex texinfo libtool libncurses5-dev wget \
-    gawk libc6-dev-i386 python-serial libexpat-dev
-sudo mkdir /opt/Espressif
-sudo chown $USER /opt/Espressif/
+sudo apt-get install libc6-dev-i386 build-essential 
 ```
 
 dependencies for x64
 ```
-sudo apt-get install git autoconf build-essential gperf \
-    bison flex texinfo libtool libncurses5-dev wget \
-    gawk libc6-dev-amd64 python-serial libexpat-dev
-sudo mkdir /opt/Espressif
-sudo chown $USER /opt/Espressif/
+sudo apt-get install libc6-dev-amd64 build-essential
 ```
 
 crosstool-NG
 ```
+sudo mkdir -p /opt/Espressif
+sudo chown $USER /opt/Espressif/
+
 cd /opt/Espressif
 git clone -b lx106-g++-1.21.0 git://github.com/jcmvbkbc/crosstool-NG.git
 cd crosstool-NG
-./bootstrap && ./configure --prefix=`pwd` && make && make install
+./bootstrap && ./configure --prefix=${PWD) && make && make install
 ./ct-ng xtensa-lx106-elf
 ./ct-ng build
 ```
@@ -55,7 +59,7 @@ PATH=$PWD/builds/xtensa-lx106-elf/bin:$PATH
 ```
 cd /opt/Esprissif
 git clone https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK.git
-ln -s ESP8266_RTOS_SDK.git ESP8266_SDK
+ln -fs ESP8266_RTOS_SDK.git ESP8266_SDK
 cd ESP8266_SDK
 git checkout -b jerry a2b413ad2996450fe2f173b6afab243f6e1249aa
 ```
@@ -74,13 +78,13 @@ export BIN_PATH=(to output folder path)
 ##### Xtensa libraries and headers:
 ```
 cd /opt/Espressif/ESP8266_SDK
-wget -O lib/libhal.a https://github.com/esp8266/esp8266-wiki/raw/master/libs/libhal.a
+wget -c -O lib/libhal.a https://github.com/esp8266/esp8266-wiki/raw/master/libs/libhal.a
 ```
 
 ##### ESP image tool
 ```
 cd /opt/Espressif
-wget -O esptool_0.0.2-1_i386.deb https://github.com/esp8266/esp8266-wiki/raw/master/deb/esptool_0.0.2-1_i386.deb
+wget -c -O esptool_0.0.2-1_i386.deb https://github.com/esp8266/esp8266-wiki/raw/master/deb/esptool_0.0.2-1_i386.deb
 sudo dpkg -i esptool_0.0.2-1_i386.deb
 ```
 
@@ -88,14 +92,14 @@ sudo dpkg -i esptool_0.0.2-1_i386.deb
 ```
 cd /opt/Espressif
 git clone https://github.com/themadinventor/esptool esptool-py
-sudo ln -s $PWD/esptool-py/esptool.py crosstool-NG/builds/xtensa-lx106-elf/bin/esptool.py
+sudo ln -fs $PWD/esptool-py/esptool.py crosstool-NG/builds/xtensa-lx106-elf/bin/esptool.py
 ```
 
 #### Test writing with Blinky example
 
 ##### Get the source
 
-found one example that works with SDK V1.2 (which is based on FreeRTOS, as of writing)
+Found one example that works with SDK V1.2 (which is based on FreeRTOS, as of writing)
 
 * https://github.com/mattcallow/esp8266-sdk/tree/master/rtos_apps/01blinky
 
@@ -103,7 +107,7 @@ found one example that works with SDK V1.2 (which is based on FreeRTOS, as of wr
 ##### Compile
 
 Read `2A-ESP8266__IOT_SDK_User_Manual_EN` document in
-[this](http://bbs.espressif.com/viewtopic.php?f=51&t=1024) link.
+[this](https://www.scribd.com/doc/282478234/2a-Esp8266-Iot-Sdk-User-Manual-en-v1-3) link.
 
 It's configured 2048KB flash
 ```
@@ -147,4 +151,4 @@ sudo /opt/Espressif/esptool-py/esptool.py \
 * connect GPIO2 with serial of 470 Ohm + LED and to GND
 * power On
 
-LED should blink on and off every second
+LED should blink on and off every second.
